@@ -1,5 +1,6 @@
 (function () {
   var homeHtml = document.getElementById("article-body").innerHTML;
+  var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var NOTES = {
     home: {
@@ -285,6 +286,7 @@
   };
 
   var currentNoteId = "home";
+  var centerEl = document.querySelector(".center");
   var titleEl = document.getElementById("article-title");
   var metaEl = document.getElementById("content-meta");
   var tagsEl = document.getElementById("article-tags");
@@ -292,6 +294,12 @@
   var bodyEl = document.getElementById("article-body");
   var tocListEl = document.getElementById("toc-list");
   var backlinksListEl = document.getElementById("backlinks-list");
+  var progressEl = document.getElementById("reading-progress");
+  var popoverEl = document.getElementById("note-popover");
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
 
   function getBacklinks(noteId) {
     var list = [];
@@ -307,7 +315,7 @@
     tocListEl.innerHTML = "";
     var headings = bodyEl.querySelectorAll("h2, h3");
     if (!headings.length) {
-      tocListEl.innerHTML = "<li style=\"color:var(--gray);font-size:0.85rem\">No sections</li>";
+      tocListEl.innerHTML = "<li style=\"color:var(--gray);font-size:0.84rem;padding-left:0.75rem\">No sections</li>";
       return;
     }
     headings.forEach(function (h, idx) {
@@ -319,9 +327,10 @@
       var a = document.createElement("a");
       a.href = "#" + h.id;
       a.textContent = h.textContent;
+      if (idx === 0) a.classList.add("in-view");
       a.addEventListener("click", function (ev) {
         ev.preventDefault();
-        h.scrollIntoView({ behavior: "smooth", block: "start" });
+        h.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
       });
       li.appendChild(a);
       tocListEl.appendChild(li);
@@ -332,7 +341,7 @@
     backlinksListEl.innerHTML = "";
     var items = getBacklinks(noteId);
     if (!items.length) {
-      backlinksListEl.innerHTML = "<li style=\"color:var(--gray);font-size:0.85rem\">No backlinks</li>";
+      backlinksListEl.innerHTML = "<li style=\"color:var(--gray);font-size:0.84rem\">No backlinks</li>";
       return;
     }
     items.forEach(function (n) {
@@ -363,7 +372,24 @@
     });
   }
 
+  function triggerNoteEntrance() {
+    if (reducedMotion || !centerEl) return;
+    centerEl.classList.remove("note-entering");
+    void centerEl.offsetWidth;
+    centerEl.classList.add("note-entering");
+  }
+
+  function hidePopover() {
+    if (popoverTimer) {
+      clearTimeout(popoverTimer);
+      popoverTimer = null;
+    }
+    popoverEl.classList.remove("visible");
+    popoverEl.setAttribute("aria-hidden", "true");
+  }
+
   function openNote(noteId, pushHash) {
+    hidePopover();
     var note = NOTES[noteId] || NOTES.home;
     currentNoteId = note.id;
     titleEl.textContent = note.title;
@@ -389,6 +415,8 @@
     renderBacklinks(note.id);
     setActiveExplorer(note.id);
     window.scrollTo(0, 0);
+    updateScrollState();
+    triggerNoteEntrance();
 
     var explorer = document.getElementById("explorer");
     var mBtn = document.getElementById("mobile-explorer-btn");
@@ -405,10 +433,51 @@
     if (globalGraph) globalGraph.setActive(note.id);
   }
 
+  var popoverTimer = null;
+
+  function showPopoverFor(linkEl) {
+    var id = linkEl.getAttribute("data-note");
+    var note = NOTES[id];
+    if (!note || id === currentNoteId) return;
+    var tagsHtml = note.tags.slice(0, 4).map(function (t) {
+      return "<span class=\"popover-tag\">#" + escapeHtml(t) + "</span>";
+    }).join("");
+    popoverEl.innerHTML = "<h4>" + escapeHtml(note.title) + "</h4><p class=\"popover-meta\">" + escapeHtml(note.meta) + "</p><p class=\"popover-summary\">" + escapeHtml(note.summary) + "</p><div class=\"popover-tags\">" + tagsHtml + "</div>";
+
+    var rect = linkEl.getBoundingClientRect();
+    var popW = 320;
+    var left = Math.max(12, Math.min(window.innerWidth - popW - 12, rect.left));
+    var placeAbove = rect.bottom + 185 > window.innerHeight && rect.top > 195;
+    popoverEl.style.left = left + "px";
+    if (placeAbove) {
+      popoverEl.style.top = Math.max(12, rect.top - 172) + "px";
+    } else {
+      popoverEl.style.top = (rect.bottom + 10) + "px";
+    }
+    popoverEl.setAttribute("aria-hidden", "false");
+    popoverEl.classList.add("visible");
+  }
+
+  document.addEventListener("mouseover", function (ev) {
+    if (window.innerWidth <= 800) return;
+    var link = ev.target.closest("article a.internal[data-note], #backlinks a.internal[data-note]");
+    if (!link) return;
+    if (popoverTimer) clearTimeout(popoverTimer);
+    popoverTimer = setTimeout(function () {
+      showPopoverFor(link);
+    }, 170);
+  });
+
+  document.addEventListener("mouseout", function (ev) {
+    var link = ev.target.closest("article a.internal[data-note], #backlinks a.internal[data-note]");
+    if (link) hidePopover();
+  });
+
   document.addEventListener("click", function (ev) {
     var tagLink = ev.target.closest("[data-tag]");
     if (tagLink) {
       ev.preventDefault();
+      hidePopover();
       openSearch(tagLink.getAttribute("data-tag"));
       return;
     }
@@ -428,11 +497,22 @@
     }
   });
 
-  document.getElementById("theme-toggle-btn").addEventListener("click", function () {
+  var themeBtn = document.getElementById("theme-toggle-btn");
+  var themeResetTimer = null;
+  themeBtn.addEventListener("click", function () {
     var cur = document.documentElement.getAttribute("saved-theme") === "dark" ? "dark" : "light";
     var next = cur === "dark" ? "light" : "dark";
+    document.documentElement.classList.add("theme-transition");
     document.documentElement.setAttribute("saved-theme", next);
     localStorage.setItem("theme", next);
+    themeBtn.classList.remove("spin");
+    void themeBtn.offsetWidth;
+    themeBtn.classList.add("spin");
+    if (themeResetTimer) clearTimeout(themeResetTimer);
+    themeResetTimer = setTimeout(function () {
+      document.documentElement.classList.remove("theme-transition");
+      themeBtn.classList.remove("spin");
+    }, 300);
     if (localGraph) localGraph.draw();
     if (globalGraph) globalGraph.draw();
   });
@@ -482,10 +562,6 @@
   var searchPreview = document.getElementById("search-preview");
   var searchItems = [];
   var focusedIndex = 0;
-
-  function escapeHtml(str) {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
 
   function highlightText(text, query) {
     var safe = escapeHtml(text);
@@ -552,11 +628,12 @@
   }
 
   function openSearch(initial) {
+    hidePopover();
     searchModal.classList.add("active");
     searchModal.setAttribute("aria-hidden", "false");
     searchInput.value = initial || "";
     runSearch(searchInput.value);
-    setTimeout(function () { searchInput.focus(); }, 10);
+    setTimeout(function () { searchInput.focus(); }, 30);
   }
 
   function closeSearch() {
@@ -599,11 +676,12 @@
   var globalGraphModal = document.getElementById("global-graph-modal");
 
   function openGlobalGraph() {
+    hidePopover();
     globalGraphModal.classList.add("active");
     globalGraphModal.setAttribute("aria-hidden", "false");
     setTimeout(function () {
       if (globalGraph) globalGraph.resize();
-    }, 20);
+    }, 30);
   }
 
   function closeGlobalGraph() {
@@ -629,6 +707,7 @@
     } else if (ev.key === "Escape") {
       closeSearch();
       closeGlobalGraph();
+      hidePopover();
     }
   });
 
@@ -637,7 +716,8 @@
     var ids = Object.keys(NOTES);
     var nodes = ids.map(function (id, i) {
       var angle = (i / ids.length) * Math.PI * 2;
-      var dist = id === "home" ? 0 : (isGlobal ? 140 : 65) + (i % 3) * (isGlobal ? 35 : 14);
+      var dist = id === "home" ? 0 : (isGlobal ? 150 : 66) + (i % 3) * (isGlobal ? 38 : 14);
+      var baseR = id === "home" ? (isGlobal ? 7.2 : 5.6) : (isGlobal ? 5 : 3.9);
       return {
         id: id,
         label: NOTES[id].title,
@@ -645,7 +725,9 @@
         y: Math.sin(angle) * dist,
         vx: 0,
         vy: 0,
-        r: id === "home" ? (isGlobal ? 7 : 5.5) : (isGlobal ? 5 : 3.8)
+        baseR: baseR,
+        curR: baseR,
+        curAlpha: 1
       };
     });
 
@@ -671,11 +753,20 @@
     var activeId = currentNoteId;
     var hovered = null;
     var dragging = null;
+    var panning = false;
+    var panStartX = 0;
+    var panStartY = 0;
+    var panX = 0;
+    var panY = 0;
+    var zoom = 1;
     var moved = false;
+    var ticks = 0;
 
     function colors() {
       var st = getComputedStyle(document.documentElement);
       return {
+        light: st.getPropertyValue("--light").trim() || "#faf8f8",
+        surface: st.getPropertyValue("--surface").trim() || "#ffffff",
         secondary: st.getPropertyValue("--secondary").trim() || "#284b63",
         tertiary: st.getPropertyValue("--tertiary").trim() || "#587971",
         gray: st.getPropertyValue("--gray").trim() || "#727272",
@@ -692,7 +783,12 @@
       canvas.height = Math.floor(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ticks = 0;
-      draw();
+      if (isGlobal) {
+        panX = 0;
+        panY = 0;
+        zoom = 1;
+      }
+      draw(performance.now());
     }
 
     function isNeighbor(a, b) {
@@ -705,10 +801,18 @@
       return false;
     }
 
+    function screenToWorld(clientX, clientY) {
+      var rect = canvas.getBoundingClientRect();
+      return {
+        x: (clientX - rect.left - width / 2 - panX) / zoom,
+        y: (clientY - rect.top - height / 2 - panY) / zoom
+      };
+    }
+
     function step() {
-      var repel = isGlobal ? 2600 : 850;
+      var repel = isGlobal ? 2800 : 880;
       var spring = isGlobal ? 0.012 : 0.018;
-      var rest = isGlobal ? 120 : 62;
+      var rest = isGlobal ? 128 : 64;
       var centerPull = 0.012;
 
       for (var i = 0; i < nodes.length; i++) {
@@ -762,55 +866,110 @@
       }
     }
 
-    function draw() {
+    function drawPillLabel(text, x, y, c, fontSize) {
+      ctx.font = "600 " + fontSize + "px \"Source Sans 3\", sans-serif";
+      var metrics = ctx.measureText(text);
+      var padX = 5;
+      var boxW = metrics.width + padX * 2;
+      var boxH = fontSize + 5;
+      var bx = x - boxW / 2;
+      var by = y - boxH + 3;
+      ctx.fillStyle = c.surface;
+      ctx.beginPath();
+      ctx.roundRect(bx, by, boxW, boxH, 4);
+      ctx.fill();
+      ctx.strokeStyle = c.lightgray;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+      ctx.fillStyle = c.dark;
+      ctx.textAlign = "center";
+      ctx.fillText(text, x, y);
+    }
+
+    function draw(now) {
       var c = colors();
-      var cx = width / 2;
-      var cy = height / 2;
+      var cx = width / 2 + panX;
+      var cy = height / 2 + panY;
+      var pulse = reducedMotion ? 0 : (Math.sin((now || 0) * 0.0024) + 1) * 0.5;
       ctx.clearRect(0, 0, width, height);
 
       for (var i = 0; i < edges.length; i++) {
         var a = edges[i][0];
         var b = edges[i][1];
         var activeEdge = hovered && (a === hovered || b === hovered);
+        var currentEdge = !hovered && (a.id === activeId || b.id === activeId);
         ctx.beginPath();
-        ctx.moveTo(cx + a.x, cy + a.y);
-        ctx.lineTo(cx + b.x, cy + b.y);
-        ctx.strokeStyle = activeEdge ? c.tertiary : c.lightgray;
-        ctx.globalAlpha = hovered ? (activeEdge ? 0.95 : 0.25) : 0.85;
-        ctx.lineWidth = activeEdge ? 1.5 : 1;
+        ctx.moveTo(cx + a.x * zoom, cy + a.y * zoom);
+        ctx.lineTo(cx + b.x * zoom, cy + b.y * zoom);
+        ctx.strokeStyle = activeEdge ? c.tertiary : (currentEdge ? c.secondary : c.lightgray);
+        ctx.globalAlpha = hovered ? (activeEdge ? 0.92 : 0.16) : (currentEdge ? 0.55 : 0.72);
+        ctx.lineWidth = activeEdge ? 1.6 : 1;
         ctx.stroke();
       }
 
       for (var j = 0; j < nodes.length; j++) {
         var n = nodes[j];
         var connected = !hovered || isNeighbor(hovered, n);
-        ctx.globalAlpha = connected ? 1 : 0.22;
+        var targetAlpha = connected ? 1 : 0.18;
+        var targetR = n.baseR * (n === hovered ? 1.38 : (n.id === activeId ? 1.18 : 1));
+        n.curAlpha += (targetAlpha - n.curAlpha) * 0.18;
+        n.curR += (targetR - n.curR) * 0.2;
+
+        var nx = cx + n.x * zoom;
+        var ny = cy + n.y * zoom;
+
+        if (n.id === activeId && !reducedMotion) {
+          ctx.globalAlpha = 0.14 + pulse * 0.18;
+          ctx.beginPath();
+          ctx.arc(nx, ny, n.curR + 3 + pulse * 3.5, 0, Math.PI * 2);
+          ctx.strokeStyle = c.tertiary;
+          ctx.lineWidth = 1.25;
+          ctx.stroke();
+        }
+
+        if (n === hovered) {
+          ctx.globalAlpha = 0.22;
+          ctx.beginPath();
+          ctx.arc(nx, ny, n.curR + 5, 0, Math.PI * 2);
+          ctx.fillStyle = c.secondary;
+          ctx.fill();
+        }
+
+        ctx.globalAlpha = n.curAlpha;
         ctx.beginPath();
-        ctx.arc(cx + n.x, cy + n.y, n.r, 0, Math.PI * 2);
+        ctx.arc(nx, ny, n.curR, 0, Math.PI * 2);
         if (n.id === activeId) ctx.fillStyle = c.tertiary;
         else if (n === hovered) ctx.fillStyle = c.secondary;
         else ctx.fillStyle = n.id === "home" ? c.secondary : c.gray;
         ctx.fill();
+      }
 
-        if (isGlobal || n === hovered || n.id === activeId || n.id === "home") {
-          ctx.font = (isGlobal ? "12px " : "10.5px ") + "\"Source Sans 3\", sans-serif";
+      for (var k = 0; k < nodes.length; k++) {
+        var ln = nodes[k];
+        var showLabel = isGlobal || ln === hovered || ln.id === activeId || ln.id === "home";
+        if (!showLabel) continue;
+        var lx = cx + ln.x * zoom;
+        var ly = cy + ln.y * zoom - ln.curR - 7;
+        ctx.globalAlpha = ln.curAlpha;
+        if (ln === hovered || ln.id === activeId) {
+          drawPillLabel(ln.label, lx, ly, c, isGlobal ? 11.5 : 10.5);
+        } else {
+          ctx.font = (isGlobal ? "11.5px " : "10.5px ") + "\"Source Sans 3\", sans-serif";
           ctx.fillStyle = c.dark;
           ctx.textAlign = "center";
-          ctx.fillText(n.label, cx + n.x, cy + n.y - n.r - 5);
+          ctx.fillText(ln.label, lx, ly);
         }
       }
       ctx.globalAlpha = 1;
     }
 
     function findNode(ev) {
-      var rect = canvas.getBoundingClientRect();
-      var mx = ev.clientX - rect.left - width / 2;
-      var my = ev.clientY - rect.top - height / 2;
+      var pt = screenToWorld(ev.clientX, ev.clientY);
       var hit = null;
-      var best = 18;
+      var best = 18 / zoom;
       for (var i = 0; i < nodes.length; i++) {
-        var dx = nodes[i].x - mx;
-        var dy = nodes[i].y - my;
+        var dx = nodes[i].x - pt.x;
+        var dy = nodes[i].y - pt.y;
         var d = Math.sqrt(dx * dx + dy * dy);
         if (d < best) {
           best = d;
@@ -822,34 +981,53 @@
 
     canvas.addEventListener("mousemove", function (ev) {
       if (dragging) {
-        var rect = canvas.getBoundingClientRect();
-        dragging.x = ev.clientX - rect.left - width / 2;
-        dragging.y = ev.clientY - rect.top - height / 2;
+        var pt = screenToWorld(ev.clientX, ev.clientY);
+        dragging.x = pt.x;
+        dragging.y = pt.y;
         moved = true;
-        draw();
+        ticks = Math.min(ticks, 120);
+        return;
+      }
+      if (panning) {
+        panX += ev.clientX - panStartX;
+        panY += ev.clientY - panStartY;
+        panStartX = ev.clientX;
+        panStartY = ev.clientY;
+        moved = true;
         return;
       }
       var hit = findNode(ev);
       if (hit !== hovered) {
         hovered = hit;
         canvas.style.cursor = hit ? "pointer" : "grab";
-        draw();
       }
     });
 
     canvas.addEventListener("mouseleave", function () {
       hovered = null;
       dragging = null;
-      draw();
+      panning = false;
     });
 
     canvas.addEventListener("mousedown", function (ev) {
       var hit = findNode(ev);
+      moved = false;
       if (hit) {
         dragging = hit;
-        moved = false;
+      } else if (isGlobal) {
+        panning = true;
+        panStartX = ev.clientX;
+        panStartY = ev.clientY;
       }
     });
+
+    if (isGlobal) {
+      canvas.addEventListener("wheel", function (ev) {
+        ev.preventDefault();
+        var factor = ev.deltaY < 0 ? 1.1 : 0.9;
+        zoom = Math.max(0.55, Math.min(2.4, zoom * factor));
+      }, { passive: false });
+    }
 
     window.addEventListener("mouseup", function () {
       if (dragging && !moved) {
@@ -860,27 +1038,31 @@
         return;
       }
       dragging = null;
+      panning = false;
     });
 
-    var ticks = 0;
-    function loop() {
-      if (ticks < 160 || dragging) {
-        step();
-        draw();
-        ticks++;
+    function loop(now) {
+      var visible = !document.hidden && (!isGlobal || globalGraphModal.classList.contains("active"));
+      if (visible) {
+        if (ticks < 160 || dragging) {
+          step();
+          ticks++;
+        }
+        draw(now);
       }
       requestAnimationFrame(loop);
     }
 
     resize();
-    loop();
+    requestAnimationFrame(loop);
 
     return {
       resize: resize,
-      draw: draw,
+      draw: function () { draw(performance.now()); },
       setActive: function (id) {
         activeId = id;
-        draw();
+        ticks = Math.min(ticks, 130);
+        draw(performance.now());
       }
     };
   }
@@ -895,18 +1077,35 @@
     }
   });
 
-  window.addEventListener("scroll", function () {
+  var scrollTicking = false;
+  function updateScrollState() {
+    var docH = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = docH > 0 ? Math.max(0, Math.min(1, window.scrollY / docH)) : 0;
+    if (progressEl) {
+      progressEl.style.transform = "scaleX(" + pct.toFixed(4) + ")";
+    }
     var headings = bodyEl.querySelectorAll("h2, h3");
     var links = tocListEl.querySelectorAll("a");
     var activeIdx = 0;
     for (var i = 0; i < headings.length; i++) {
-      if (headings[i].getBoundingClientRect().top <= 120) {
+      if (headings[i].getBoundingClientRect().top <= 130) {
         activeIdx = i;
       }
     }
     links.forEach(function (a, idx) {
       a.classList.toggle("in-view", idx === activeIdx);
     });
+  }
+
+  window.addEventListener("scroll", function () {
+    hidePopover();
+    if (!scrollTicking) {
+      scrollTicking = true;
+      requestAnimationFrame(function () {
+        updateScrollState();
+        scrollTicking = false;
+      });
+    }
   }, { passive: true });
 
   var initialHash = window.location.hash.replace(/^#/, "");
@@ -916,5 +1115,7 @@
     renderToc();
     renderBacklinks("home");
     setActiveExplorer("home");
+    updateScrollState();
+    triggerNoteEntrance();
   }
 })();
