@@ -4,34 +4,28 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sheikh Mehraan (sheikhmehraann / sheikhmehraan)</title>
-  <meta name="description" content="Sheikh Mehraan (sheikhmehraann, sheikhmehraan, mehraann19) - developer from Kashmir working on MediaTek bootloaders, Android kernels, firmware tools, and Infinix GT 20 Pro (X6871).">
+  <meta name="description" content="Sheikh Mehraan (SheikhMehraan, sheikhmehraann, sheikhmehraan, mehraann19) - developer from Kashmir working on MediaTek bootloaders, Android custom recoveries, GKI kernels, and firmware tools for Infinix GT 20 Pro (X6871).">
   <meta name="author" content="Sheikh Mehraan">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://sheikhmehraann.github.io/">
   <meta property="og:type" content="profile">
   <meta property="og:title" content="Sheikh Mehraan (sheikhmehraann / sheikhmehraan)">
-  <meta property="og:description" content="Developer from Kashmir working on MediaTek bootloaders, Android kernels, firmware tools, and Infinix GT 20 Pro (X6871).">
+  <meta property="og:description" content="Developer from Kashmir working on MediaTek bootloaders, custom recoveries, Android kernels, and firmware tools for Infinix GT 20 Pro (X6871).">
   <meta property="og:url" content="https://sheikhmehraann.github.io/">
   <link rel="me" href="https://github.com/sheikhmehraann">
   <link rel="me" href="https://t.me/mehraann19">
   <link rel="me" href="https://sourceforge.net/u/mehraann19/profile/">
-  <style>
-    :root { color-scheme: light dark; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      line-height: 1.6;
-      max-width: 720px;
-      margin: 48px auto;
-      padding: 0 20px;
-    }
-    h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
-    h2 { font-size: 1.15rem; margin-top: 2rem; margin-bottom: 0.5rem; }
-    h3 { font-size: 1rem; margin-top: 1.25rem; margin-bottom: 0.35rem; }
-    ul { padding-left: 1.25rem; }
-    li { margin-bottom: 0.45rem; }
-    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.92em; }
-    a { text-underline-offset: 2px; }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Schibsted+Grotesk:wght@400;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="./quartz.css">
+  <script>
+    (function () {
+      var saved = localStorage.getItem("theme");
+      var theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("saved-theme", theme);
+    })();
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -49,7 +43,7 @@
         "Mehraann",
         "mehraann19"
       ],
-      "description": "Developer from Kashmir working on low-level Android internals, MediaTek bootloaders, kernel builds, and firmware tools for Infinix GT 20 Pro (X6871).",
+      "description": "Developer from Kashmir working on low-level Android internals, MediaTek bootloaders, custom recoveries, kernel builds, and firmware tools for Infinix GT 20 Pro (X6871).",
       "homeLocation": {
         "@type": "Place",
         "name": "Kashmir"
@@ -66,46 +60,217 @@
   </script>
 </head>
 <body>
-  <main>
-    <h1>Sheikh Mehraan</h1>
-    <p>I'm Sheikh Mehraan (also online as <code>SheikhMehraan</code>, <code>sheikhmehraann</code>, <code>sheikh mehraann</code>, <code>sheikhmehraan</code>, <code>Mehraann</code>, and <code>mehraann19</code>), a developer from Kashmir. I work on low-level Android internals, MediaTek bootloaders, custom recoveries, kernel builds, and firmware tools, mostly around the Infinix GT 20 Pro (X6871 / MediaTek Dimensity 8200 Ultimate / MT6895).</p>
+  <div id="quartz-root" class="page">
+    <div id="quartz-body">
+      <aside class="left sidebar">
+        <div class="left-top">
+          <button type="button" class="icon-button mobile-explorer-btn" id="mobile-explorer-btn" aria-label="Toggle explorer" aria-expanded="false">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <h2 class="page-title"><a href="#home" data-note="home">Sheikh Mehraan</a></h2>
+        </div>
 
-    <h2>Where to find me</h2>
-    <ul>
-      <li>GitHub: <a rel="me" href="https://github.com/sheikhmehraann">github.com/sheikhmehraann</a> (<code>@sheikhmehraann</code>)</li>
-      <li>Telegram: <a rel="me" href="https://t.me/mehraann19">t.me/mehraann19</a> (<code>@mehraann19</code>)</li>
-      <li>SourceForge: <a rel="me" href="https://sourceforge.net/u/mehraann19/profile/">sourceforge.net/u/mehraann19</a> (<code>mehraann19</code>)</li>
-      <li>Email: <a href="mailto:mehraann.19@gmail.com">mehraann.19@gmail.com</a></li>
-    </ul>
+        <div class="controls-row">
+          <button type="button" class="search-button" id="search-open-btn" aria-label="Search">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>Search</span>
+            <kbd>Ctrl K</kbd>
+          </button>
+          <button type="button" class="icon-button darkmode" id="theme-toggle-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg class="sun-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+          <button type="button" class="icon-button readermode" id="reader-toggle-btn" aria-label="Toggle reader mode" title="Toggle reader mode">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+          </button>
+        </div>
 
-    <h2>Public repositories</h2>
+        <nav class="explorer" id="explorer" aria-label="Explorer">
+          <div class="explorer-header">
+            <button type="button" class="explorer-title-btn" id="explorer-collapse-btn" aria-expanded="true">
+              <span>Explorer</span>
+              <svg class="chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+          </div>
+          <div class="explorer-content" id="explorer-content">
+            <ul class="explorer-ul">
+              <li><a href="#home" class="explorer-link active" data-note="home">Overview</a></li>
+              <li class="folder open">
+                <button type="button" class="folder-toggle" aria-expanded="true">
+                  <svg class="chevron" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  <span>Bootloader &amp; Kernel</span>
+                </button>
+                <ul class="folder-ul">
+                  <li><a href="#fenrir-x6871" class="explorer-link" data-note="fenrir-x6871">Fenrir-X6871</a></li>
+                  <li><a href="#renkai-x6871" class="explorer-link" data-note="renkai-x6871">Renkai-X6871</a></li>
+                  <li><a href="#x6871-recovery-project" class="explorer-link" data-note="x6871-recovery-project">X6871-Recovery-Project</a></li>
+                  <li><a href="#gki-5-10-kernel-builder" class="explorer-link" data-note="gki-5-10-kernel-builder">gki-5.10-kernel-builder</a></li>
+                </ul>
+              </li>
+              <li class="folder open">
+                <button type="button" class="folder-toggle" aria-expanded="true">
+                  <svg class="chevron" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  <span>Firmware &amp; Flashing</span>
+                </button>
+                <ul class="folder-ul">
+                  <li><a href="#newbies-flasher" class="explorer-link" data-note="newbies-flasher">Newbies-Flasher</a></li>
+                  <li><a href="#transsion-firmware-toolkit" class="explorer-link" data-note="transsion-firmware-toolkit">Transsion-Firmware-Toolkit</a></li>
+                  <li><a href="#transsion-flashable-builder" class="explorer-link" data-note="transsion-flashable-builder">transsion-flashable-builder</a></li>
+                </ul>
+              </li>
+              <li class="folder open">
+                <button type="button" class="folder-toggle" aria-expanded="true">
+                  <svg class="chevron" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  <span>Mods &amp; Utilities</span>
+                </button>
+                <ul class="folder-ul">
+                  <li><a href="#onepeek" class="explorer-link" data-note="onepeek">OnePeek</a></li>
+                  <li><a href="#ios-emoji-font" class="explorer-link" data-note="ios-emoji-font">IOS-Emoji-Font</a></li>
+                  <li><a href="#gofile-fast-link-transfer" class="explorer-link" data-note="gofile-fast-link-transfer">gofile-fast-link-transfer</a></li>
+                  <li><a href="#winmemorycleaner" class="explorer-link" data-note="winmemorycleaner">WinMemoryCleaner</a></li>
+                  <li><a href="#antigravity-jailbreak" class="explorer-link" data-note="antigravity-jailbreak">Antigravity-Jailbreak</a></li>
+                </ul>
+              </li>
+              <li><a href="#contact" class="explorer-link" data-note="contact">Where to find me</a></li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
 
-    <h3>Bootloader, kernel, and recovery</h3>
-    <ul>
-      <li><a href="https://github.com/sheikhmehraann/Fenrir-X6871">Fenrir-X6871</a> - MediaTek LittleKernel (LK) payload injector and AVB/verified boot patcher for the Infinix GT 20 Pro (X6871) on Android 16.</li>
-      <li><a href="https://github.com/sheikhmehraann/Renkai-X6871">Renkai-X6871</a> - Patched LittleKernel (<code>lk</code>) and bootloader images for X6871 on XOS 14 and XOS 15 (Android 14 and 15).</li>
-      <li><a href="https://github.com/sheikhmehraann/X6871-Recovery-Project">X6871-Recovery-Project</a> - Multi-recovery Android 16 (Linux 6.12 GKI) <code>vendor_boot</code> device tree and GitHub Actions builder for Infinix GT 20 Pro (TWRP, YARP, OrangeFox, AERA, PBRP, SHRP) with Trustonic decryption, touch, and haptics patches.</li>
-      <li><a href="https://github.com/sheikhmehraann/gki-5.10-kernel-builder">gki-5.10-kernel-builder</a> - GitHub Actions workflow that builds Android GKI 5.10.270 with APatch root and packages an AnyKernel3 zip.</li>
-    </ul>
+      <div class="center">
+        <header class="page-header">
+          <div class="reader-exit-bar" id="reader-exit-bar">
+            <button type="button" class="reader-exit-btn" id="reader-exit-btn">Exit reader mode</button>
+          </div>
+          <nav class="breadcrumbs" id="breadcrumbs" aria-label="Breadcrumb">
+            <span>Home</span>
+          </nav>
+          <h1 class="article-title" id="article-title">Sheikh Mehraan</h1>
+          <p class="content-meta" id="content-meta">Kashmir - 12 public repos - Updated Nov 27, 2026</p>
+          <ul class="tags" id="article-tags">
+            <li><a class="internal tag-link" href="#home" data-tag="x6871">x6871</a></li>
+            <li><a class="internal tag-link" href="#home" data-tag="mt6895">mt6895</a></li>
+            <li><a class="internal tag-link" href="#home" data-tag="mediatek">mediatek</a></li>
+            <li><a class="internal tag-link" href="#home" data-tag="android">android</a></li>
+            <li><a class="internal tag-link" href="#home" data-tag="littlekernel">littlekernel</a></li>
+          </ul>
+        </header>
 
-    <h3>Firmware, OTA, and flashing tools</h3>
-    <ul>
-      <li><a href="https://github.com/sheikhmehraann/Newbies-Flasher">Newbies-Flasher</a> - Zero-dependency Python GUI and CLI that packages raw, Android sparse, or zstd partition images into recovery-flashable zips on Windows, Linux, macOS, and Termux, with <code>lptools</code> dynamic partition and AVB 2.0 <code>vbmeta</code> support.</li>
-      <li><a href="https://github.com/sheikhmehraann/Transsion-Firmware-Toolkit">Transsion-Firmware-Toolkit</a> - CLI and GitHub Actions scripts for probing, extracting, repacking (<code>.tar.zst</code>), and flashing Transsion (Infinix, Tecno, itel) OTAs.</li>
-      <li><a href="https://github.com/sheikhmehraann/transsion-flashable-builder">transsion-flashable-builder</a> - Builds A/B recovery-flashable zips from Transsion stock firmware dumps using <code>lptools</code> and zstd.</li>
-    </ul>
+        <article class="popover-hint" id="article-body">
+          <p>I'm Sheikh Mehraan (also online as <code>SheikhMehraan</code>, <code>sheikhmehraann</code>, <code>sheikh mehraann</code>, <code>sheikhmehraan</code>, <code>Mehraann</code>, and <code>mehraann19</code>), a developer from Kashmir. I work on low-level Android internals, MediaTek bootloaders, custom recoveries, kernel builds, and firmware tools, mostly around the Infinix GT 20 Pro (X6871 / MediaTek Dimensity 8200 Ultimate / MT6895).</p>
 
-    <h3>Android mods and utilities</h3>
-    <ul>
-      <li><a href="https://github.com/sheikhmehraann/OnePeek">OnePeek</a> - Small libxposed (API 102 / LSPosed) module for Google One that queries Play Billing offers and free trials and shows the raw pricing phases.</li>
-      <li><a href="https://github.com/sheikhmehraann/IOS-Emoji-Font">IOS-Emoji-Font</a> - Magisk, KernelSU, and APatch module replacing Android system fonts with Apple SF Pro and iOS emoji, with metric patch tools for Indian and RTL writing systems.</li>
-      <li><a href="https://github.com/sheikhmehraann/gofile-fast-link-transfer">gofile-fast-link-transfer</a> - Transfers files from Google Drive, SourceForge, MediaFire, Dropbox, or direct URLs straight to GoFile using multi-connection downloads and <code>curl</code>.</li>
-      <li><a href="https://github.com/sheikhmehraann/WinMemoryCleaner">WinMemoryCleaner</a> - Modified fork of Igor Mundstein's WinMemoryCleaner with extra Windows tweaks, minimize-to-tray behavior, and a compact settings layout.</li>
-      <li><a href="https://github.com/sheikhmehraann/Antigravity-Jailbreak">Antigravity-Jailbreak</a> - System prompt profiles and a Python/Batch switcher for Google Antigravity <code>AGENTS.md</code> files.</li>
-    </ul>
+          <div class="callout info">
+            <div class="callout-title">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <span>Official accounts</span>
+            </div>
+            <div class="callout-content">
+              <p>GitHub: <a rel="me" href="https://github.com/sheikhmehraann">github.com/sheikhmehraann</a> - Telegram: <a rel="me" href="https://t.me/mehraann19">@mehraann19</a> - SourceForge: <a rel="me" href="https://sourceforge.net/u/mehraann19/profile/">mehraann19</a> - Email: <a href="mailto:mehraann.19@gmail.com">mehraann.19@gmail.com</a></p>
+            </div>
+          </div>
 
-    <h2>What I use</h2>
-    <p>Python, C, C++, ARM64 assembly, Kotlin, Makefile, Shell, Batch, and C#. Most of the Android work uses LittleKernel, AVB/VBMeta, <code>vendor_boot</code>, <code>lptools</code>, <code>payload.bin</code>, AnyKernel3, TWRP/OrangeFox, Magisk/KernelSU/APatch, LSPosed, and GitHub Actions.</p>
-  </main>
+          <h2 id="bootloader-kernel-recovery">Bootloader, kernel, and recovery</h2>
+          <ul>
+            <li><a class="internal" href="#fenrir-x6871" data-note="fenrir-x6871">Fenrir-X6871</a> (<a href="https://github.com/sheikhmehraann/Fenrir-X6871">GitHub</a>) - MediaTek LittleKernel (LK) payload injector and AVB/verified boot patcher for the Infinix GT 20 Pro (X6871) on Android 16.</li>
+            <li><a class="internal" href="#renkai-x6871" data-note="renkai-x6871">Renkai-X6871</a> (<a href="https://github.com/sheikhmehraann/Renkai-X6871">GitHub</a>) - Patched LittleKernel (<code>lk</code>) and bootloader images for X6871 on XOS 14 and XOS 15 (Android 14 and 15).</li>
+            <li><a class="internal" href="#x6871-recovery-project" data-note="x6871-recovery-project">X6871-Recovery-Project</a> (<a href="https://github.com/sheikhmehraann/X6871-Recovery-Project">GitHub</a>) - Multi-recovery Android 16 (Linux 6.12 GKI) <code>vendor_boot</code> device tree and GitHub Actions builder for Infinix GT 20 Pro (TWRP, YARP, OrangeFox, AERA, PBRP, SHRP) with Trustonic decryption, touch, and haptics patches.</li>
+            <li><a class="internal" href="#gki-5-10-kernel-builder" data-note="gki-5-10-kernel-builder">gki-5.10-kernel-builder</a> (<a href="https://github.com/sheikhmehraann/gki-5.10-kernel-builder">GitHub</a>) - GitHub Actions workflow that builds Android GKI 5.10.270 with APatch root and packages an AnyKernel3 zip.</li>
+          </ul>
+
+          <h2 id="firmware-ota-flashing">Firmware, OTA, and flashing tools</h2>
+          <ul>
+            <li><a class="internal" href="#newbies-flasher" data-note="newbies-flasher">Newbies-Flasher</a> (<a href="https://github.com/sheikhmehraann/Newbies-Flasher">GitHub</a>) - Zero-dependency Python GUI and CLI that packages raw, Android sparse, or zstd partition images into recovery-flashable zips on Windows, Linux, macOS, and Termux, with <code>lptools</code> dynamic partition and AVB 2.0 <code>vbmeta</code> support.</li>
+            <li><a class="internal" href="#transsion-firmware-toolkit" data-note="transsion-firmware-toolkit">Transsion-Firmware-Toolkit</a> (<a href="https://github.com/sheikhmehraann/Transsion-Firmware-Toolkit">GitHub</a>) - CLI and GitHub Actions scripts for probing, extracting, repacking (<code>.tar.zst</code>), and flashing Transsion (Infinix, Tecno, itel) OTAs.</li>
+            <li><a class="internal" href="#transsion-flashable-builder" data-note="transsion-flashable-builder">transsion-flashable-builder</a> (<a href="https://github.com/sheikhmehraann/transsion-flashable-builder">GitHub</a>) - Builds A/B recovery-flashable zips from Transsion stock firmware dumps using <code>lptools</code> and zstd.</li>
+          </ul>
+
+          <h2 id="android-mods-utilities">Android mods and utilities</h2>
+          <ul>
+            <li><a class="internal" href="#onepeek" data-note="onepeek">OnePeek</a> (<a href="https://github.com/sheikhmehraann/OnePeek">GitHub</a>) - Small libxposed (API 102 / LSPosed) module for Google One that queries Play Billing offers and free trials and shows the raw pricing phases.</li>
+            <li><a class="internal" href="#ios-emoji-font" data-note="ios-emoji-font">IOS-Emoji-Font</a> (<a href="https://github.com/sheikhmehraann/IOS-Emoji-Font">GitHub</a>) - Magisk, KernelSU, and APatch module replacing Android system fonts with Apple SF Pro and iOS emoji, with metric patch tools for Indian and RTL writing systems.</li>
+            <li><a class="internal" href="#gofile-fast-link-transfer" data-note="gofile-fast-link-transfer">gofile-fast-link-transfer</a> (<a href="https://github.com/sheikhmehraann/gofile-fast-link-transfer">GitHub</a>) - Transfers files from Google Drive, SourceForge, MediaFire, Dropbox, or direct URLs straight to GoFile using multi-connection downloads and <code>curl</code>.</li>
+            <li><a class="internal" href="#winmemorycleaner" data-note="winmemorycleaner">WinMemoryCleaner</a> (<a href="https://github.com/sheikhmehraann/WinMemoryCleaner">GitHub</a>) - Modified fork of Igor Mundstein's WinMemoryCleaner with extra Windows tweaks, minimize-to-tray behavior, and a compact settings layout.</li>
+            <li><a class="internal" href="#antigravity-jailbreak" data-note="antigravity-jailbreak">Antigravity-Jailbreak</a> (<a href="https://github.com/sheikhmehraann/Antigravity-Jailbreak">GitHub</a>) - System prompt profiles and a Python/Batch switcher for Google Antigravity <code>AGENTS.md</code> files.</li>
+          </ul>
+
+          <h2 id="what-i-use">What I use</h2>
+          <p>Python, C, C++, ARM64 assembly, Kotlin, Makefile, Shell, Batch, and C#. Most of the Android work uses LittleKernel, AVB/VBMeta, <code>vendor_boot</code>, <code>lptools</code>, <code>payload.bin</code>, AnyKernel3, TWRP/OrangeFox, Magisk/KernelSU/APatch, LSPosed, and GitHub Actions.</p>
+
+          <h2 id="where-to-find-me">Where to find me</h2>
+          <ul>
+            <li>GitHub: <a rel="me" href="https://github.com/sheikhmehraann">github.com/sheikhmehraann</a> (<code>@sheikhmehraann</code>)</li>
+            <li>Telegram: <a rel="me" href="https://t.me/mehraann19">t.me/mehraann19</a> (<code>@mehraann19</code>)</li>
+            <li>SourceForge: <a rel="me" href="https://sourceforge.net/u/mehraann19/profile/">sourceforge.net/u/mehraann19</a> (<code>mehraann19</code>)</li>
+            <li>Email: <a href="mailto:mehraann.19@gmail.com">mehraann.19@gmail.com</a></li>
+          </ul>
+        </article>
+
+        <footer class="site-footer">
+          <p>Sheikh Mehraan (<code>sheikhmehraann</code>)</p>
+          <ul>
+            <li><a href="https://github.com/sheikhmehraann">GitHub</a></li>
+            <li><a href="https://t.me/mehraann19">Telegram</a></li>
+            <li><a href="https://sourceforge.net/u/mehraann19/profile/">SourceForge</a></li>
+            <li><a href="mailto:mehraann.19@gmail.com">Email</a></li>
+          </ul>
+        </footer>
+      </div>
+
+      <aside class="right sidebar">
+        <div class="graph">
+          <div class="graph-header">
+            <h3>Graph View</h3>
+            <button type="button" class="icon-button graph-expand-btn" id="graph-expand-btn" aria-label="Open global graph" title="Global Graph (Ctrl+G)">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+            </button>
+          </div>
+          <div class="graph-outer">
+            <canvas id="graph-canvas"></canvas>
+          </div>
+        </div>
+
+        <div class="toc" id="toc">
+          <button type="button" class="toc-header" id="toc-toggle-btn" aria-expanded="true">
+            <h3>Table of Contents</h3>
+            <svg class="chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <ul class="toc-content" id="toc-list"></ul>
+        </div>
+
+        <div class="backlinks" id="backlinks">
+          <h3>Backlinks</h3>
+          <ul id="backlinks-list"></ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="search-container" id="search-modal" aria-hidden="true">
+    <div class="search-space">
+      <div class="search-input-wrap">
+        <input type="text" id="search-input" placeholder="Search repos, tools, tags..." autocomplete="off" spellcheck="false">
+      </div>
+      <div class="search-body">
+        <div class="search-results" id="search-results"></div>
+        <div class="search-preview" id="search-preview"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="global-graph-container" id="global-graph-modal" aria-hidden="true">
+    <div class="global-graph-outer">
+      <div class="global-graph-bar">
+        <span>Global Graph - click any node to open</span>
+        <button type="button" class="icon-button" id="global-graph-close-btn" aria-label="Close global graph">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="global-graph-stage">
+        <canvas id="global-graph-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script src="./quartz.js"></script>
 </body>
 </html>
